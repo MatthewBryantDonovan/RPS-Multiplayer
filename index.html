@@ -22,7 +22,7 @@
             </div>
         </div>
         <div class="row justify-content-center bg-warning">
-            <div class="col-md-12 ">
+            <div id="now-playing" class="col-md-12 ">
                 <div class="input-group mb-3">
                     <input id="player-name-entry" type="text" class="form-control" placeholder="Recipient's username"
                         aria-label="Recipient's username" aria-describedby="basic-addon2">
@@ -36,8 +36,8 @@
                     <div class="card" style="width: 18rem;">
                         <!-- <img src="..." class="card-img-top" alt="..."> -->
                         <div class="card-body">
-                            <h5 class="card-title">Player 1</h5>
-                            <p id="p1-name" class="card-text">p1 name</p>
+                            <h5 class="card-title">Seat 1</h5>
+                            <p id="p1-name" class="card-text">Waiting for an opponent</p>
                         </div>
                         <ul class="list-group list-group-flush">
                             <li onclick="p1RPS()" class="list-group-item" data="Rock">Rock</li>
@@ -71,8 +71,8 @@
                     <div class="card" style="width: 18rem;">
                         <!-- <img src="..." class="card-img-top" alt="..."> -->
                         <div class="card-body">
-                            <h5 class="card-title">Player 2</h5>
-                            <p id="p2-name" class="card-text">p2 name</p>
+                            <h5 class="card-title">Seat 2</h5>
+                            <p id="p2-name" class="card-text">Waiting for an opponent</p>
                         </div>
                         <ul class="list-group list-group-flush">
                             <li onclick="p2RPS()" class="list-group-item" data="Rock">Rock</li>
@@ -89,7 +89,7 @@
         </div>
 
         <div class="row justify-content-center bg-secondary">
-            <div class="col-md-4 pt-3">
+            <div class="col-md-6 pt-3">
                 <div class="input-group">
 
                     <textarea rows="7" id="chat-area" class="form-control" aria-label="With textarea" readonly></textarea>
@@ -113,31 +113,7 @@
         <!--  chat box  -->
 
 
-        <!-- The core Firebase JS SDK is always required and must be listed first -->
-        <script src="https://www.gstatic.com/firebasejs/7.3.0/firebase-app.js"></script>
-
-        <!-- TODO: Add SDKs for Firebase products that you want to use
-     https://firebase.google.com/docs/web/setup#available-libraries -->
-        <script src="https://www.gstatic.com/firebasejs/7.3.0/firebase-analytics.js"></script>
-
-        <script>
-            // Your web app's Firebase configuration
-            var firebaseConfig = {
-                apiKey: "AIzaSyBaph50_2RypR7WfozNjLlkTteXIZksevc",
-                authDomain: "rps-multiplayer-78c9c.firebaseapp.com",
-                databaseURL: "https://rps-multiplayer-78c9c.firebaseio.com",
-                projectId: "rps-multiplayer-78c9c",
-                storageBucket: "rps-multiplayer-78c9c.appspot.com",
-                messagingSenderId: "80630422967",
-                appId: "1:80630422967:web:748655e60839ed76605c32",
-                measurementId: "G-6M6ZM1JKXT"
-            };
-            // Initialize Firebase
-            firebase.initializeApp(firebaseConfig);
-            firebase.analytics();
-        </script>
         <!-- jQuery Library and custom javascript  and firebase-->
-        <script src="https://www.gstatic.com/firebasejs/live/3.0/firebase.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
             integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
@@ -148,6 +124,10 @@
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
             integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
         </script>
+        <script src="https://www.gstatic.com/firebasejs/7.4.0/firebase-app.js"></script>
+
+        <script src="https://www.gstatic.com/firebasejs/7.4.0/firebase-database.js"></script>
+
         <script type="text/javascript" src="./assets/javascript/game.js"></script>
 </body>
 
