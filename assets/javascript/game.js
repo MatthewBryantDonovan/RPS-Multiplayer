@@ -183,16 +183,22 @@
               (p1Choice === "Scissors" && p2Choice === "Paper") ||
               (p1Choice === "Paper" && p2Choice === "Rock")) {
               $("#p1-win").html(p1Name + " wins!");
+              $("#tie").html(p1Name + " picked " + p1Choice);
+              $("#p2-win").html(p2Name + " picked " + p2Choice);
               p1Wins++;
               $("#p1-wins").html("Wins: " + p1Wins);
               p2Losses++;
               $("#p2-losses").html("Losses: " + p2Losses);
           } else if (p1Choice === p2Choice) {
               $("#tie").html(p1Name + " and " + p2Name + " tie!");
+              $("#p2-win").html(p2Name + " picked " + p2Choice);
+              $("#p1-win").html(p1Name + " picked " + p1Choice);
               ties++;
               $("#ties").html("Ties: " + ties);
           } else {
               $("#p2-win").html(p2Name + " wins!");
+              $("#tie").html(p2Name + " picked " + p2Choice);
+              $("#p1-win").html(p1Name + " picked " + p1Choice);
               p2Wins++;
               $("#p2-wins").html("Wins: " + p2Wins);
               p1Losses++;
