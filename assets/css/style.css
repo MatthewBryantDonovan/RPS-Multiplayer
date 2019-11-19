@@ -1,3 +1,7 @@
-#player-name-entry {
+/* #player-name-entry {
     width: 20vw;
+} */
+
+body {
+    background: #6c757d;
 }
