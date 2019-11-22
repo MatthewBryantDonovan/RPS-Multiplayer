@@ -87,16 +87,6 @@
           /* $("#announcer").html("Pick your choice!") */ // I don't think I need this anymore
           arenaOpen = true;
       }
-      /*  // might not need this anmore now that I am writing to database.ref("/RPSp2")
-            database.ref("/RPSinfo").set({
-                p1ChoiceKey: p1Choice,
-                p2ChoiceKey: p2Choice,
-                p1WinsKey: p1Wins,
-                p1LossesKey: p1Losses,
-                p2WinsKey: p2Wins,
-                p2LossesKey: p2Losses,
-                tiesKey: ties,
-            }); */
 
       //Display what the user is
       $("#now-playing").empty()
@@ -115,9 +105,8 @@
       } else if (whatAmI == "P2") {
           con2 = database.ref("/RPSp2").push(whoAmI);
       } else {
-        con2 = database.ref("/RPSspec").push(whoAmI);
+          con2 = database.ref("/RPSspec").push(whoAmI);
       }
-      console.log(con2);
       con2.onDisconnect().remove();
       return con2;
 
@@ -276,51 +265,60 @@
   //update user when RPSp1 is updated
   database.ref("RPSp1").on("value", function (snapshot) {
       console.log("p1 trigger");
+      var p2children = 0;
 
-       if  (snapshot.numChildren() == 2 ) {
-        p1Name = snapshot.val().p1NameKey;
-       }else {
-        p1Name = "";
-        $("#announcer").html("Two players needed to play!")
-        database.ref("/RPSinfo").set({
-            p1ChoiceKey: "",
-            p2ChoiceKey: "",
-            p1WinsKey: 0,
-            p1LossesKey: 0,
-            p2WinsKey: 0,
-            p2LossesKey: 0,
-            tiesKey: 0,
-        });
-        $("#p1-wins").html("Wins: 0");
-        $("#p1-losses").html("Losses: 0");
-        $("#ties").html("Ties: 0");
-        $("#p2-wins").html("Wins: 0");
-        $("#p2-losses").html("Losses: 0");
-        $("#p1-win").html("");
-        $("#p2-win").html("");
-        $("#tie").html("");
+      database.ref("RPSp2").on("value", function (snapshot) {
+          p2children = snapshot.numChildren();
+          console.log("-------------------------------" + p2children);
+          
+      })
 
-        var currentChat = $("#chat-area").val().trim();
-        if (currentChat == "") {
-            $("#chat-area").html("[SERVER MESSAGE] ~Seat 1 Available~ Welcome to Rock Paper Scissors! Enter your name to take a seat. If you are spectating be the 1st refresh your browser and enter your name again to take a seat!  You must log in to use the Chat!");
-        } else {
-            $("#chat-area").html(currentChat + "&#13" + "[SERVER MESSAGE] ~Seat 1 Available~ Welcome to Rock Paper Scissors! Enter your name to take a seat. If you are spectating be the 1st refresh your browser and enter your name again to take a seat! You must log in to use the Chat!");
-            $('#chat-area').scrollTop($('#chat-area')[0].scrollHeight);
+      if (snapshot.numChildren() == 2) {
+          p1Name = snapshot.val().p1NameKey;
+      } else {
+          p1Name = "";
+          $("#announcer").html("Two players needed to play!")
+          database.ref("/RPSinfo").set({
+              p1ChoiceKey: "",
+              p2ChoiceKey: "",
+              p1WinsKey: 0,
+              p1LossesKey: 0,
+              p2WinsKey: 0,
+              p2LossesKey: 0,
+              tiesKey: 0,
+          });
+          $("#p1-wins").html("Wins: 0");
+          $("#p1-losses").html("Losses: 0");
+          $("#ties").html("Ties: 0");
+          $("#p2-wins").html("Wins: 0");
+          $("#p2-losses").html("Losses: 0");
+          $("#p1-win").html("");
+          $("#p2-win").html("");
+          $("#tie").html("");
 
-        }
+          var currentChat = $("#chat-area").val().trim();
+          if (currentChat == "") {
+              $("#chat-area").html("[SERVER MESSAGE] ~Seat 1 Available~ Welcome to Rock Paper Scissors! Enter your name to take a seat. If you are spectating be the 1st refresh your browser and enter your name again to take a seat!  You must log in to use the Chat!");
+          } else {
+              $("#chat-area").html(currentChat + "&#13" + "[SERVER MESSAGE] ~Seat 1 Available~ Welcome to Rock Paper Scissors! Enter your name to take a seat. If you are spectating be the 1st refresh your browser and enter your name again to take a seat! You must log in to use the Chat!");
+              $('#chat-area').scrollTop($('#chat-area')[0].scrollHeight);
+
+          }
 
       }
 
       var currentChat = $("#chat-area").val().trim();
-      if(currentChat == ""){
-        $("#chat-area").html("[SERVER MESSAGE] ~Welcome Spectator~ Welcome to Rock Paper Scissors! Enter your name to take a seat. If you are spectating be the 1st refresh your browser and enter your name again to take a seat! You must log in to use the Chat!");
-      }
-     
+      /* if (currentChat == "" && p2children != 2) {
+          console.log("RPS 1 spec ran");
+          
+          $("#chat-area").html("[SERVER MESSAGE] ~Welcome Spectator~ Welcome to Rock Paper Scissors! Enter your name to take a seat. If you are spectating be the 1st refresh your browser and enter your name again to take a seat! You must log in to use the Chat!");
+      } */
+
 
       if (p1Name != "") {
           $("#p1-name").html(p1Name);
-      }else {
-        $("#p1-name").html("Waiting for an opponent");
+      } else {
+          $("#p1-name").html("Waiting for an opponent");
       }
 
       if (p2Name != "" && p1Name != "") {
@@ -336,51 +334,60 @@
 
   //update user when RPSp2 is updated
   database.ref("RPSp2").on("value", function (snapshot) {
-      console.log("p2 trigger");
-      if (snapshot.numChildren() == 2 ) {
+      console.log("p2 trigger + snap#child= " + snapshot.numChildren());
+      var p1children = 0;
+
+      database.ref("RPSp1").on("value", function (snapshot) {
+          console.log("p2 trigger + snap#child for p1= " + snapshot.numChildren());
+          p1children = snapshot.numChildren();
+      })
+
+      if (snapshot.numChildren() == 2) {
           p2Name = snapshot.val().p2NameKey;
 
       } else {
-        p2Name = "";
-        $("#announcer").html("Two players needed to play!")
-        database.ref("/RPSinfo").set({
-            p1ChoiceKey: "",
-            p2ChoiceKey: "",
-            p1WinsKey: 0,
-            p1LossesKey: 0,
-            p2WinsKey: 0,
-            p2LossesKey: 0,
-            tiesKey: 0,
-        });
-        $("#p1-wins").html("Wins: 0");
-        $("#p1-losses").html("Losses: 0");
-        $("#ties").html("Ties: 0");
-        $("#p2-wins").html("Wins: 0");
-        $("#p2-losses").html("Losses: 0");
-        $("#p1-win").html("");
-        $("#p2-win").html("");
-        $("#tie").html("");
+          p2Name = "";
+          $("#announcer").html("Two players needed to play!")
+          database.ref("/RPSinfo").set({
+              p1ChoiceKey: "",
+              p2ChoiceKey: "",
+              p1WinsKey: 0,
+              p1LossesKey: 0,
+              p2WinsKey: 0,
+              p2LossesKey: 0,
+              tiesKey: 0,
+          });
+          $("#p1-wins").html("Wins: 0");
+          $("#p1-losses").html("Losses: 0");
+          $("#ties").html("Ties: 0");
+          $("#p2-wins").html("Wins: 0");
+          $("#p2-losses").html("Losses: 0");
+          $("#p1-win").html("");
+          $("#p2-win").html("");
+          $("#tie").html("");
 
-        var currentChat = $("#chat-area").val().trim();
-        if (currentChat == "") {
-            $("#chat-area").html("[SERVER MESSAGE] ~Seat 2 Available~ Welcome to Rock Paper Scissors! Enter your name to take a seat. If you are spectating be the 1st refresh your browser and enter your name again to take a seat! You must log in to use the Chat!");
-        } else {
-            $("#chat-area").html(currentChat + "&#13" + "[SERVER MESSAGE] ~Seat 2 Available~ Welcome to Rock Paper Scissors! Enter your name to take a seat. If you are spectating be the 1st refresh your browser and enter your name again to take a seat! You must log in to use the Chat!");
-            $('#chat-area').scrollTop($('#chat-area')[0].scrollHeight);
+          var currentChat = $("#chat-area").val().trim();
+          if (currentChat == "") {
+              $("#chat-area").html("[SERVER MESSAGE] ~Seat 2 Available~ Welcome to Rock Paper Scissors! Enter your name to take a seat. If you are spectating be the 1st refresh your browser and enter your name again to take a seat!  You must log in to use the Chat!");
+          } else if (snapshot.numChildren() == 1){
+              
+              $("#chat-area").html(currentChat + "&#13" + "[SERVER MESSAGE] ~Seat 2 Available~ Welcome to Rock Paper Scissors! Enter your name to take a seat. If you are spectating be the 1st refresh your browser and enter your name again to take a seat! You must log in to use the Chat!");
+              $('#chat-area').scrollTop($('#chat-area')[0].scrollHeight);
 
-        }
+          }
 
       }
 
       var currentChat = $("#chat-area").val().trim();
-      if(currentChat == ""){
-        $("#chat-area").html("[SERVER MESSAGE] ~Welcome Spectator~ Welcome to Rock Paper Scissors! Enter your name to take a seat. If you are spectating be the 1st refresh your browser and enter your name again to take a seat! You must log in to use the Chat!");
+      if (currentChat == "" && p1children == 2) {
+        console.log("RPS 2 spec ran");
+          $("#chat-area").html("[SERVER MESSAGE] ~Welcome Spectator~ Welcome to Rock Paper Scissors! Enter your name to take a seat. If you are spectating be the 1st refresh your browser and enter your name again to take a seat! You must log in to use the Chat!");
       }
 
       if (p2Name != "") {
           $("#p2-name").html(p2Name);
       } else {
-        $("#p2-name").html("Waiting for an opponent");
+          $("#p2-name").html("Waiting for an opponent");
       }
 
       if (p2Name != "" && p1Name != "") {
@@ -419,16 +426,16 @@
       }
 
       $("#p1-wins").html("Wins: " + p1Wins);
-        $("#p1-losses").html("Losses: " + p1Losses);
-        $("#ties").html("Ties: " + ties);
-        $("#p2-wins").html("Wins: " + p2Wins);
-        $("#p2-losses").html("Losses: " + p2Losses);
+      $("#p1-losses").html("Losses: " + p1Losses);
+      $("#ties").html("Ties: " + ties);
+      $("#p2-wins").html("Wins: " + p2Wins);
+      $("#p2-losses").html("Losses: " + p2Losses);
 
 
 
       if (p2Choice != "" && p1Choice != "") {
           console.log("ran result");
-          
+
           result();
       }
 
@@ -453,15 +460,15 @@
   database.ref("RPS1").on("value", function (snap) {
 
       // If they are connected..
-          
-          // Add user to the connections list.
-          /* var con = connectionsRef.push("player1"); */
 
-          // Remove user from the connection list when they disconnect. 
-        if(con2 != undefined) {
-            console.log(con2);
+      // Add user to the connections list.
+      /* var con = connectionsRef.push("player1"); */
+
+      // Remove user from the connection list when they disconnect. 
+      if (con2 != undefined) {
+          console.log(con2);
           con2.onDisconnect().remove();
-        }
+      }
 
   });
 
@@ -500,28 +507,16 @@
   keepP2(){} // logic for when p2 disconnects
   */
 
+  /*
 
-  /* # Unit 7 Assignment - Rock Paper Scissors (Challenge)
+  psudeocode for new board
 
-  ### Instructions
-  * Create a game that suits this user story:
-
-    * Only two users can play at the same time.
-
-    * Both players pick either `rock`, `paper` or `scissors`. 
-    After the players make their selection, the game will tell them 
-    whether a tie occurred or if one player defeated the other.
-
-    * The game will track each player's wins and losses.
-
-    * Throw some chat functionality in there! No online multiplayer game is complete without 
-    having to endure endless taunts and insults from your jerk opponent.
-
-    * Styling and theme are completely up to you. Get Creative!
-
-    * Deploy your assignment to Github Pages.
-
-  ### Create a README.md
-  * [About READMEs](https://help.github.com/articles/about-readmes/)
-  * [Mastering Markdown](https://guides.github.com/features/mastering-markdown/)
-   */
+  Title
+  Name entry (swaps to player name / spectator name) 
+  * possibly allow a button to populate if whatAmI is a spec to take p1 or p2
+  player board will be the rock paper scissors....
+  user can click on their symbol announcer will be at the stop still
+  when showdown happens display correct image for win and apply player 1 and player 2 borders for their corresponding selections
+  when a selection is down highly what you selected.
+  
+  */
