@@ -30,6 +30,7 @@
   var specName = "";
   var whoAmI = ""; //player name
   var whatAmI = ""; // if they are player1[P1], player2[P2] or the spectator[Spectator]
+  var myChoice = "";
   var chatMessage = "";
   var p1Exists = false;
   var p2Exists = false;
@@ -45,6 +46,87 @@
           document.getElementById("player-name-entry-submit").click();
       }
   });
+
+  function takeP1() {
+      var currentName = "";
+      var p = "";
+      p1Name = whoAmI;
+      currentName = p1Name;
+      p = "Player 1";
+      $("#p1-name").html(p1Name);
+      p1Access = true;
+      whatAmI = "P1";
+      database.ref("/RPSp1").set({
+          p1NameKey: p1Name,
+      });
+
+      if (p1Name != "" && p2Name != "" && arenaOpen == false) {
+          /* $("#announcer").html("Pick your choice!") */ // I don't think I need this anymore
+          arenaOpen = true;
+      }
+      //Display what the user is
+      $("#now-playing").empty()
+      if (p1Access == true || p2Access == true) {
+          $("#now-playing").append().html("<h1>You are playing as " + currentName + "</h1>")
+      } else {
+          $("#now-playing").append().html("<h1>You are spectating as " + currentName + "</h1>")
+      }
+
+      whoAmI = currentName;
+
+      //going to try to make it so con2 = player positon
+
+      if (whatAmI == "P1") {
+          con2 = database.ref("/RPSp1").push(whoAmI);
+      } else if (whatAmI == "P2") {
+          con2 = database.ref("/RPSp2").push(whoAmI);
+      } else {
+          con2 = database.ref("/RPSspec").push(whoAmI);
+      }
+      con2.onDisconnect().remove();
+      return con2;
+  };
+
+  function takeP2() {
+    var currentName = "";
+    var p = "";
+    p2Name = whoAmI;
+          currentName = p2Name;
+          p = "Player 2";
+          $("#p2-name").html(p2Name);
+          p2Access = true;
+          whatAmI = "P2";
+          database.ref("/RPSp2").set({
+              p2NameKey: p2Name,
+          });
+
+    if (p1Name != "" && p2Name != "" && arenaOpen == false) {
+        /* $("#announcer").html("Pick your choice!") */ // I don't think I need this anymore
+        arenaOpen = true;
+    }
+    //Display what the user is
+    $("#now-playing").empty()
+    if (p1Access == true || p2Access == true) {
+        $("#now-playing").append().html("<h1>You are playing as " + currentName + "</h1>")
+    } else {
+        $("#now-playing").append().html("<h1>You are spectating as " + currentName + "</h1>")
+    }
+
+    whoAmI = currentName;
+
+    //going to try to make it so con2 = player positon
+
+    if (whatAmI == "P1") {
+        con2 = database.ref("/RPSp1").push(whoAmI);
+    } else if (whatAmI == "P2") {
+        con2 = database.ref("/RPSp2").push(whoAmI);
+    } else {
+        con2 = database.ref("/RPSspec").push(whoAmI);
+    }
+    con2.onDisconnect().remove();
+    return con2;
+  };
+
 
   function enterArena() { // add player to game or signify spectator
       var currentName = "";
@@ -265,16 +347,18 @@
   //update user when RPSp1 is updated
   database.ref("RPSp1").on("value", function (snapshot) {
       console.log("p1 trigger");
-      var p2children = 0;
+      var p1children = 1;
+      var p2children = 1;
 
       database.ref("RPSp2").on("value", function (snapshot) {
           p2children = snapshot.numChildren();
           console.log("-------------------------------" + p2children);
-          
+
       })
 
       if (snapshot.numChildren() == 2) {
           p1Name = snapshot.val().p1NameKey;
+          p1children = 2;
       } else {
           p1Name = "";
           $("#announcer").html("Two players needed to play!")
@@ -297,10 +381,10 @@
           $("#tie").html("");
 
           var currentChat = $("#chat-area").val().trim();
-          if (currentChat == "") {
-              $("#chat-area").html("[SERVER MESSAGE] ~Seat 1 Available~ Welcome to Rock Paper Scissors! Enter your name to take a seat. If you are spectating be the 1st refresh your browser and enter your name again to take a seat!  You must log in to use the Chat!");
-          } else {
-              $("#chat-area").html(currentChat + "&#13" + "[SERVER MESSAGE] ~Seat 1 Available~ Welcome to Rock Paper Scissors! Enter your name to take a seat. If you are spectating be the 1st refresh your browser and enter your name again to take a seat! You must log in to use the Chat!");
+          if (currentChat == "" && p1children == 1) {
+              $("#chat-area").html("[SERVER MESSAGE] ~Seat 1 Available~ Welcome to Rock Paper Scissors! Enter your name to take a seat and access the chat. If you are spectating and a seat becomes available, click 'Take a seat and play' to join!");
+          } else if (snapshot.numChildren() == 1) {
+              $("#chat-area").html(currentChat + "&#13" + "[SERVER MESSAGE] ~Seat 1 Available~ Welcome to Rock Paper Scissors! Enter your name to take a seat and access the chat. If you are spectating and a seat becomes available, click 'Take a seat and play' to join!");
               $('#chat-area').scrollTop($('#chat-area')[0].scrollHeight);
 
           }
@@ -308,10 +392,10 @@
       }
 
       var currentChat = $("#chat-area").val().trim();
-      /* if (currentChat == "" && p2children != 2) {
+      /* if (currentChat == "" && p2children != 2) { // this may not be needed
           console.log("RPS 1 spec ran");
           
-          $("#chat-area").html("[SERVER MESSAGE] ~Welcome Spectator~ Welcome to Rock Paper Scissors! Enter your name to take a seat. If you are spectating be the 1st refresh your browser and enter your name again to take a seat! You must log in to use the Chat!");
+          $("#chat-area").html("[SERVER MESSAGE] ~Welcome Spectator~ Welcome to Rock Paper Scissors! Enter your name to take a seat and access the chat. If you are spectating and a seat becomes available, click 'Take a seat and play' to join!");
       } */
 
 
@@ -328,6 +412,13 @@
 
       console.log("p1 finish data P1: " + p1Name + " P2: " + p2Name);
 
+      if (whatAmI == "Spectator" && (p2children == 1 || p1children == 1)) {
+          console.log("GIMME ACCESS TO SPOT P1 trigger");
+          $(".joinGame").html("<button class='input-group-text' id='takeP1' onclick='takeP1()'>Take a seat and play</button>");
+      } else {
+          $(".joinGame").empty();
+      }
+
   }, function (errorObject) {
       console.log("The read failed: " + errorObject.code);
   });
@@ -335,7 +426,8 @@
   //update user when RPSp2 is updated
   database.ref("RPSp2").on("value", function (snapshot) {
       console.log("p2 trigger + snap#child= " + snapshot.numChildren());
-      var p1children = 0;
+      var p1children = 1;
+      var p2children = 1;
 
       database.ref("RPSp1").on("value", function (snapshot) {
           console.log("p2 trigger + snap#child for p1= " + snapshot.numChildren());
@@ -344,6 +436,7 @@
 
       if (snapshot.numChildren() == 2) {
           p2Name = snapshot.val().p2NameKey;
+          p2children = 2;
 
       } else {
           p2Name = "";
@@ -367,11 +460,11 @@
           $("#tie").html("");
 
           var currentChat = $("#chat-area").val().trim();
-          if (currentChat == "") {
-              $("#chat-area").html("[SERVER MESSAGE] ~Seat 2 Available~ Welcome to Rock Paper Scissors! Enter your name to take a seat. If you are spectating be the 1st refresh your browser and enter your name again to take a seat!  You must log in to use the Chat!");
-          } else if (snapshot.numChildren() == 1){
-              
-              $("#chat-area").html(currentChat + "&#13" + "[SERVER MESSAGE] ~Seat 2 Available~ Welcome to Rock Paper Scissors! Enter your name to take a seat. If you are spectating be the 1st refresh your browser and enter your name again to take a seat! You must log in to use the Chat!");
+          if (currentChat == "" && p2children == 1) {
+              $("#chat-area").html("[SERVER MESSAGE] ~Seat 2 Available~ Welcome to Rock Paper Scissors! Enter your name to take a seat and access the chat. If you are spectating and a seat becomes available, click 'Take a seat and play' to join!");
+          } else if (snapshot.numChildren() == 1) {
+
+              $("#chat-area").html(currentChat + "&#13" + "[SERVER MESSAGE] ~Seat 2 Available~ Welcome to Rock Paper Scissors! Enter your name to take a seat and access the chat. If you are spectating and a seat becomes available, click 'Take a seat and play' to join!");
               $('#chat-area').scrollTop($('#chat-area')[0].scrollHeight);
 
           }
@@ -380,8 +473,8 @@
 
       var currentChat = $("#chat-area").val().trim();
       if (currentChat == "" && p1children == 2) {
-        console.log("RPS 2 spec ran");
-          $("#chat-area").html("[SERVER MESSAGE] ~Welcome Spectator~ Welcome to Rock Paper Scissors! Enter your name to take a seat. If you are spectating be the 1st refresh your browser and enter your name again to take a seat! You must log in to use the Chat!");
+          console.log("RPS 2 spec ran");
+          $("#chat-area").html("[SERVER MESSAGE] ~Welcome Spectator~ Welcome to Rock Paper Scissors! Enter your name to take a seat and access the chat. If you are spectating and a seat becomes available, click 'Take a seat and play' to join!");
       }
 
       if (p2Name != "") {
@@ -393,6 +486,13 @@
       if (p2Name != "" && p1Name != "") {
           $("#announcer").html("Pick Rock Paper or Scissors!")
 
+      }
+
+      if (whatAmI == "Spectator" && (p2children == 1 || p1children == 1)) {
+          console.log("GIMME ACCESS TO SPOT P2 trigger");
+          $(".joinGame").html("<button class='input-group-text' id='takeP2' onclick='takeP2()'>Take a seat and play</button>");
+      } else {
+          $(".joinGame").empty();
       }
 
       console.log("p2 finish data P1:" + p1Name + "P2:" + p2Name);
