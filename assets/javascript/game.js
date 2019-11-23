@@ -67,9 +67,9 @@
       //Display what the user is
       $("#now-playing").empty()
       if (p1Access == true || p2Access == true) {
-          $("#now-playing").append().html("<h1>You are playing as " + currentName + "</h1>")
+          $("#now-playing").append().html("<h1 class='text-center'>You are playing as " + currentName + "</h1>")
       } else {
-          $("#now-playing").append().html("<h1>You are spectating as " + currentName + "</h1>")
+          $("#now-playing").append().html("<h1 class='text-center'>You are spectating as " + currentName + "</h1>")
       }
 
       whoAmI = currentName;
@@ -88,43 +88,43 @@
   };
 
   function takeP2() {
-    var currentName = "";
-    var p = "";
-    p2Name = whoAmI;
-          currentName = p2Name;
-          p = "Player 2";
-          $("#p2-name").html(p2Name);
-          p2Access = true;
-          whatAmI = "P2";
-          database.ref("/RPSp2").set({
-              p2NameKey: p2Name,
-          });
+      var currentName = "";
+      var p = "";
+      p2Name = whoAmI;
+      currentName = p2Name;
+      p = "Player 2";
+      $("#p2-name").html(p2Name);
+      p2Access = true;
+      whatAmI = "P2";
+      database.ref("/RPSp2").set({
+          p2NameKey: p2Name,
+      });
 
-    if (p1Name != "" && p2Name != "" && arenaOpen == false) {
-        /* $("#announcer").html("Pick your choice!") */ // I don't think I need this anymore
-        arenaOpen = true;
-    }
-    //Display what the user is
-    $("#now-playing").empty()
-    if (p1Access == true || p2Access == true) {
-        $("#now-playing").append().html("<h1>You are playing as " + currentName + "</h1>")
-    } else {
-        $("#now-playing").append().html("<h1>You are spectating as " + currentName + "</h1>")
-    }
+      if (p1Name != "" && p2Name != "" && arenaOpen == false) {
+          /* $("#announcer").html("Pick your choice!") */ // I don't think I need this anymore
+          arenaOpen = true;
+      }
+      //Display what the user is
+      $("#now-playing").empty()
+      if (p1Access == true || p2Access == true) {
+          $("#now-playing").append().html("<h1 class='text-center'>You are playing as " + currentName + "</h1>")
+      } else {
+          $("#now-playing").append().html("<h1 class='text-center'>You are spectating as " + currentName + "</h1>")
+      }
 
-    whoAmI = currentName;
+      whoAmI = currentName;
 
-    //going to try to make it so con2 = player positon
+      //going to try to make it so con2 = player positon
 
-    if (whatAmI == "P1") {
-        con2 = database.ref("/RPSp1").push(whoAmI);
-    } else if (whatAmI == "P2") {
-        con2 = database.ref("/RPSp2").push(whoAmI);
-    } else {
-        con2 = database.ref("/RPSspec").push(whoAmI);
-    }
-    con2.onDisconnect().remove();
-    return con2;
+      if (whatAmI == "P1") {
+          con2 = database.ref("/RPSp1").push(whoAmI);
+      } else if (whatAmI == "P2") {
+          con2 = database.ref("/RPSp2").push(whoAmI);
+      } else {
+          con2 = database.ref("/RPSspec").push(whoAmI);
+      }
+      con2.onDisconnect().remove();
+      return con2;
   };
 
 
@@ -173,9 +173,9 @@
       //Display what the user is
       $("#now-playing").empty()
       if (p1Access == true || p2Access == true) {
-          $("#now-playing").append().html("<h1>You are playing as " + currentName + "</h1>")
+          $("#now-playing").append().html("<h1 class='text-center'>You are playing as " + currentName + "</h1>")
       } else {
-          $("#now-playing").append().html("<h1>You are spectating as " + currentName + "</h1>")
+          $("#now-playing").append().html("<h1 class='text-center'>You are spectating as " + currentName + "</h1>")
       }
 
       whoAmI = currentName;
@@ -192,6 +192,15 @@
       con2.onDisconnect().remove();
       return con2;
 
+  }
+
+  function pRPS() {
+      if (whatAmI == "P1") {
+          p1RPS();
+      }
+      if (whatAmI == "P2") {
+          p2RPS();
+      }
   }
 
   function p1RPS() { //player1's turn to select
@@ -247,6 +256,63 @@
   function result() { // see who wins
       $("#announcer").html("Results are in!")
 
+      if (p1Choice === "Rock") {
+          $(".Rock").css({
+              "border": "10px solid red",
+              "padding": "5px",
+          });
+      };
+      if (p1Choice === "Paper") {
+          $(".Paper").css({
+              "border": "10px solid red",
+              "padding": "5px",
+          });
+      };
+      if (p1Choice === "Scissors") {
+          $(".Scissors").css({
+              "border": "10px solid red",
+              "padding": "5px",
+          });
+      };
+
+      if (p2Choice === "Rock") {
+          $(".Rock").css({
+              "border": "10px solid blue",
+              "padding": "5px",
+          });
+      };
+      if (p2Choice === "Paper") {
+          $(".Paper").css({
+              "border": "10px solid blue",
+              "padding": "5px",
+          });
+      };
+      if (p2Choice === "Scissors") {
+          $(".Scissors").css({
+              "border": "10px solid blue",
+              "padding": "5px",
+          });
+      };
+
+      if (p2Choice === "Rock" && p1Choice === "Rock") {
+          $(".Rock").css({
+              "border": "10px solid yellow",
+              "padding": "5px",
+          });
+      };
+      if (p2Choice === "Paper" && p1Choice === "Paper") {
+          $(".Paper").css({
+              "border": "10px solid yellow",
+              "padding": "5px",
+          });
+      };
+      if (p2Choice === "Scissors" && p1Choice === "Scissors") {
+          $(".Scissors").css({
+              "border": "10px solid yellow",
+              "padding": "5px",
+          });
+      };
+
 
       if ((p1Choice === "Rock") || (p1Choice === "Paper") || (p1Choice === "Scissors")) {
 
@@ -257,8 +323,10 @@
               $("#tie").html(p1Name + " picked " + p1Choice);
               $("#p2-win").html(p2Name + " picked " + p2Choice);
               p1Wins++;
+              $("#p1-result").html(p1Name + " wins!");
               $("#p1-wins").html("Wins: " + p1Wins);
               p2Losses++;
+              $("#p2-result").html(p2Name + " lost!");
               $("#p2-losses").html("Losses: " + p2Losses);
           } else if (p1Choice === p2Choice) {
               $("#tie").html(p1Name + " and " + p2Name + " tie!");
@@ -266,11 +334,15 @@
               $("#p1-win").html(p1Name + " picked " + p1Choice);
               ties++;
               $("#ties").html("Ties: " + ties);
+              $("#p1-result").html(p1Name + " tied!");
+              $("#p2-result").html(p2Name + " tied!");
           } else {
               $("#p2-win").html(p2Name + " wins!");
               $("#tie").html(p2Name + " picked " + p2Choice);
               $("#p1-win").html(p1Name + " picked " + p1Choice);
               p2Wins++;
+              $("#p2-result").html(p2Name + " wins!");
+              $("#p1-result").html(p1Name + " lost!");
               $("#p2-wins").html("Wins: " + p2Wins);
               p1Losses++;
               $("#p1-losses").html("Losses: " + p1Losses);
@@ -414,7 +486,7 @@
 
       if (whatAmI == "Spectator" && (p2children == 1 || p1children == 1)) {
           console.log("GIMME ACCESS TO SPOT P1 trigger");
-          $(".joinGame").html("<button class='input-group-text' id='takeP1' onclick='takeP1()'>Take a seat and play</button>");
+          $(".joinGame").html("<button id='takeP1' onclick='takeP1()'>Take a seat and play</button>");
       } else {
           $(".joinGame").empty();
       }
@@ -511,6 +583,16 @@
       p2Losses = snapshot.val().p2LossesKey;
       ties = snapshot.val().tiesKey;
 
+      $(".Scissors").css({
+          "border": "none",
+      });
+      $(".Rock").css({
+          "border": "none",
+      });
+      $(".Paper").css({
+          "border": "none",
+      });
+
       if (p1Choice != "") {
           $("#announcer").html("Waiting on " + p2Name + "!");
           $("#p1-win").html("");
@@ -530,6 +612,8 @@
       $("#ties").html("Ties: " + ties);
       $("#p2-wins").html("Wins: " + p2Wins);
       $("#p2-losses").html("Losses: " + p2Losses);
+      $("#p1-result").html("");
+      $("#p2-result").html("");
 
 
 
