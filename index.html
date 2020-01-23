@@ -14,7 +14,7 @@
 </head>
 
 <body>
-
+    <!-- Header -->
     <div class="container-fluid">
         <div class="row bg-header">
             <div id="gifBtn" class="col-md-12 text-center">
@@ -22,7 +22,7 @@
             </div>
         </div>
 
-
+        <!-- Enter game area -->
         <div class="row justify-content-md-center">
             <div id="now-playing" class="mt-3 mx-auto align-self-center">
                 <div class="input-group mb-3">
@@ -46,7 +46,7 @@
         </div>
 
 
-        <div class="row">
+        <div class="row"> <!-- this row has P1 game board, the announcer, and P2 game board -->
             <div id="gifBtn" class="col-md-3 text-center border-p1">
                 <h1>Seat 1</h1>
                 <h2 id="p1-name"></h2>
@@ -67,14 +67,7 @@
                 <h4 id="p2-result"></h4>
             </div>
         </div>
-        <div class="row">
-            <!-- <div id="gifBtn" class="col-md-2 text-center border-p1">
-                <h1>Seat 1</h1>
-                <h2 id="p1-name"></h2>
-                <h4 id="p1-wins"></h4>
-                <h4 id="p1-losses"></h4>
-                <h4 id="p1-result"></h4>
-            </div> -->
+        <div class="row"> <!-- Cleaned up the site look to display 3 big rock paper scissors buttons -->
             <div id="gifBtn" class="col-md-4 text-center">
                 <img src="assets/images/BR.png" class="rounded-circle Rock Rock-size" alt="Rock" data="Rock"
                     onclick="pRPS()">
@@ -87,85 +80,9 @@
                 <img src="assets/images/BS.png" class="rounded-circle Scissors Scissors-size" alt="Scissors"
                     data="Scissors" onclick="pRPS()">
             </div>
-
-            <!-- <div id="gifBtn" class="col-md-2 text-center border-p2">
-                <h1>Seat 2</h1>
-                <h2 id="p2-name">joe</h2>
-                <h4 id="p2-wins"></h4>
-                <h4 id="p2-losses"></h4>
-                <h4 id="p2-result"></h4>
-            </div> -->
         </div>
-        <!-- <div class="row">
 
-            <div id="gifBtn" class="col-md-12 text-center">
-                <img src="assets/images/BS.png" class="rounded-circle Scissors Scissors-size" alt="Scissors" data="Scissors"
-                    onclick="pRPS()">
-            </div>
-        </div> -->
-
-        <!-- end new add -->
-
-        <!-- <div class="row justify-content-center bg-warning">
-
-            <div class="row justify-content-center">
-                <div id="player1" class="col-md-4 mb-3">
-                    <div class="card" style="width: 18rem;">
-                        <div class="card-body">
-                            <h5 class="card-title">Seat 1</h5>
-                            <p id="p1-name" class="card-text">Waiting for an opponent</p>
-                        </div>
-                        <ul class="list-group list-group-flush">
-                            <li onclick="p1RPS()" class="list-group-item" data="Rock">Rock</li>
-                            <li onclick="p1RPS()" class="list-group-item" data="Paper">Paper</li>
-                            <li onclick="p1RPS()" class="list-group-item" data="Scissors">Scissors</li>
-                        </ul>
-                        <div class="card-body">
-                            <span id="p1-wins">Wins: 0</span>
-                            <span id="p1-losses">Losses: 0</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div id="result" class="col-md-4 mb-3">
-                    <div class="card" style="width: 18rem;">
-                        <div class="card-body">
-                            <h5 class="card-title">Results</h5>
-                            <p id="announcer" class="card-text"></p>
-                        </div>
-                        <ul class="list-group list-group-flush">
-                            <li id="p1-win" class="list-group-item"></li>
-                            <li id="tie" class="list-group-item"></li>
-                            <li id="p2-win" class="list-group-item"></li>
-                        </ul>
-                        <div class="card-body">
-                            <span id="ties">Ties: 0</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div id="player2" class="col-md-4 mb-3">
-                    <div class="card" style="width: 18rem;">
-                        <div class="card-body">
-                            <h5 class="card-title">Seat 2</h5>
-                            <p id="p2-name" class="card-text">Waiting for an opponent</p>
-                        </div>
-                        <ul class="list-group list-group-flush">
-                            <li onclick="p2RPS()" class="list-group-item" data="Rock">Rock</li>
-                            <li onclick="p2RPS()" class="list-group-item" data="Paper">Paper</li>
-                            <li onclick="p2RPS()" class="list-group-item" data="Scissors">Scissors</li>
-                        </ul>
-                        <div class="card-body">
-                            <span id="p2-wins">Wins: 0</span>
-                            <span id="p2-losses">Losses: 0</span>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </div> -->
-
-        <div class="row justify-content-center">
+        <div class="row justify-content-center"><!-- Chat area -->
             <div class="col-md-6 pt-3">
                 <div class="input-group">
                     <textarea rows="7" id="chat-area" class="form-control" aria-label="With textarea"
@@ -182,6 +99,7 @@
             </div>
         </div>
 
+        <!-- Pseudo Code -->
         <!--  Heading  -->
         <!--  enter name to join  -->
         <!--  battlefield consisting of p1 - result - p2  -->
@@ -190,21 +108,10 @@
         <!--  chat box  -->
 
 
-        <!-- jQuery Library and custom javascript  and firebase-->
+        <!-- jQuery Library, firebase-app, firebase-database, and custom javascript-->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
-        </script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
-            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous">
-        </script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
-            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
-        </script>
         <script src="https://www.gstatic.com/firebasejs/7.4.0/firebase-app.js"></script>
-
         <script src="https://www.gstatic.com/firebasejs/7.4.0/firebase-database.js"></script>
-
         <script type="text/javascript" src="./assets/javascript/game.js"></script>
 </body>
 

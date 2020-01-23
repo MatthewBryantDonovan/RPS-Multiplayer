@@ -1,4 +1,4 @@
-  // Your web app's Firebase configuration
+  // Your web app's Firebase configuration.
   var firebaseConfig = {
       apiKey: "AIzaSyBr2SU9eroV8YVTygOYW9lFn0t0qCw4oIM",
       authDomain: "rps-multiplayer-11a3d.firebaseapp.com",
@@ -7,8 +7,8 @@
       storageBucket: "rps-multiplayer-11a3d.appspot.com",
       messagingSenderId: "612449636794",
       appId: "1:612449636794:web:4d11fe6ba1cb3f668ecd83"
-  };
-  // Initialize Firebase
+  }
+  // Initialize Firebase.
   firebase.initializeApp(firebaseConfig);
 
   // Create a variable to reference the database.
@@ -36,9 +36,9 @@
   var p2Exists = false;
   var con2;
 
-  $("#announcer").html("Two players needed to play!")
+  $("#announcer").html("Two players needed to play!");
 
-  // if enter -> "keyCode === 13" is pressed in the $("#player-name-entry") input field act as if it was submitted
+  // If enter -> "keyCode === 13" is pressed in the $("#player-name-entry") input field act as if it was submitted
   var userInput = document.getElementById("player-name-entry");
   userInput.addEventListener("keyup", function (event) {
       if (event.keyCode === 13) {
@@ -47,6 +47,7 @@
       }
   });
 
+  // Take player 1 seat
   function takeP1() {
       var currentName = "";
       var p = "";
@@ -57,24 +58,22 @@
       p1Access = true;
       whatAmI = "P1";
       database.ref("/RPSp1").set({
-          p1NameKey: p1Name,
+          p1NameKey: p1Name
       });
 
       if (p1Name != "" && p2Name != "" && arenaOpen == false) {
-          /* $("#announcer").html("Pick your choice!") */ // I don't think I need this anymore
           arenaOpen = true;
       }
       //Display what the user is
-      $("#now-playing").empty()
+      $("#now-playing").empty();
       if (p1Access == true || p2Access == true) {
-          $("#now-playing").append().html("<h1 class='text-center'>You are playing as " + currentName + "</h1>")
+          $("#now-playing").append().html("<h1 class='text-center'>You are playing as " + currentName + "</h1>");
       } else {
-          $("#now-playing").append().html("<h1 class='text-center'>You are spectating as " + currentName + "</h1>")
+          $("#now-playing").append().html("<h1 class='text-center'>You are spectating as " + currentName + "</h1>");
       }
 
       whoAmI = currentName;
 
-      //going to try to make it so con2 = player positon
 
       if (whatAmI == "P1") {
           con2 = database.ref("/RPSp1").push(whoAmI);
@@ -85,8 +84,9 @@
       }
       con2.onDisconnect().remove();
       return con2;
-  };
+  }
 
+  // Take player 2 seat
   function takeP2() {
       var currentName = "";
       var p = "";
@@ -97,24 +97,22 @@
       p2Access = true;
       whatAmI = "P2";
       database.ref("/RPSp2").set({
-          p2NameKey: p2Name,
+          p2NameKey: p2Name
       });
 
       if (p1Name != "" && p2Name != "" && arenaOpen == false) {
-          /* $("#announcer").html("Pick your choice!") */ // I don't think I need this anymore
           arenaOpen = true;
       }
       //Display what the user is
-      $("#now-playing").empty()
+      $("#now-playing").empty();
       if (p1Access == true || p2Access == true) {
-          $("#now-playing").append().html("<h1 class='text-center'>You are playing as " + currentName + "</h1>")
+          $("#now-playing").append().html("<h1 class='text-center'>You are playing as " + currentName + "</h1>");
       } else {
-          $("#now-playing").append().html("<h1 class='text-center'>You are spectating as " + currentName + "</h1>")
+          $("#now-playing").append().html("<h1 class='text-center'>You are spectating as " + currentName + "</h1>");
       }
 
       whoAmI = currentName;
 
-      //going to try to make it so con2 = player positon
 
       if (whatAmI == "P1") {
           con2 = database.ref("/RPSp1").push(whoAmI);
@@ -125,10 +123,10 @@
       }
       con2.onDisconnect().remove();
       return con2;
-  };
+  }
 
-
-  function enterArena() { // add player to game or signify spectator
+  // See if the recent user name will be a player or spectator
+  function enterArena() { 
       var currentName = "";
       var p = "";
 
@@ -144,7 +142,7 @@
           p1Access = true;
           whatAmI = "P1";
           database.ref("/RPSp1").set({
-              p1NameKey: p1Name,
+              p1NameKey: p1Name
           });
       } else if (p2Name == "") {
           p2Name = $("#player-name-entry").val().trim();
@@ -154,7 +152,7 @@
           p2Access = true;
           whatAmI = "P2";
           database.ref("/RPSp2").set({
-              p2NameKey: p2Name,
+              p2NameKey: p2Name
           });
       } else {
           specName = $("#player-name-entry").val().trim();
@@ -166,21 +164,19 @@
       $("#player-name-entry").val("");
 
       if (p1Name != "" && p2Name != "" && arenaOpen == false) {
-          /* $("#announcer").html("Pick your choice!") */ // I don't think I need this anymore
           arenaOpen = true;
       }
 
       //Display what the user is
-      $("#now-playing").empty()
+      $("#now-playing").empty();
       if (p1Access == true || p2Access == true) {
-          $("#now-playing").append().html("<h1 class='text-center'>You are playing as " + currentName + "</h1>")
+          $("#now-playing").append().html("<h1 class='text-center'>You are playing as " + currentName + "</h1>");
       } else {
-          $("#now-playing").append().html("<h1 class='text-center'>You are spectating as " + currentName + "</h1>")
+          $("#now-playing").append().html("<h1 class='text-center'>You are spectating as " + currentName + "</h1>");
       }
 
       whoAmI = currentName;
 
-      //going to try to make it so con2 = player positon
 
       if (whatAmI == "P1") {
           con2 = database.ref("/RPSp1").push(whoAmI);
@@ -194,6 +190,7 @@
 
   }
 
+  //Only allow P1 and P2 to play RPS.
   function pRPS() {
       if (whatAmI == "P1") {
           p1RPS();
@@ -203,7 +200,8 @@
       }
   }
 
-  function p1RPS() { //player1's turn to select
+  // Player 1's ability to play RPS
+  function p1RPS() { 
       if (p1Name == "" || p2Name == "" || p1Access == false) {
           return;
       }
@@ -225,12 +223,13 @@
           p1LossesKey: p1Losses,
           p2WinsKey: p2Wins,
           p2LossesKey: p2Losses,
-          tiesKey: ties,
+          tiesKey: ties
       });
 
   }
 
-  function p2RPS() { // player2's turn to select
+  //Player 2's ability to play RPS
+  function p2RPS() { 
       if (p1Name == "" || p2Name == "" || p2Access == false) {
           return;
       }
@@ -246,72 +245,72 @@
           p1LossesKey: p1Losses,
           p2WinsKey: p2Wins,
           p2LossesKey: p2Losses,
-          tiesKey: ties,
+          tiesKey: ties
       });
 
   }
 
 
-
-  function result() { // see who wins
-      $("#announcer").html("Results are in!")
+  // See who wins the RPS
+  function result() {
+      $("#announcer").html("Results are in!");
 
       if (p1Choice === "Rock") {
           $(".Rock").css({
               "border": "10px solid red",
-              "padding": "5px",
+              "padding": "5px"
           });
-      };
+      }
       if (p1Choice === "Paper") {
           $(".Paper").css({
               "border": "10px solid red",
-              "padding": "5px",
+              "padding": "5px"
           });
-      };
+      }
       if (p1Choice === "Scissors") {
           $(".Scissors").css({
               "border": "10px solid red",
-              "padding": "5px",
+              "padding": "5px"
           });
-      };
+      }
 
       if (p2Choice === "Rock") {
           $(".Rock").css({
               "border": "10px solid blue",
-              "padding": "5px",
+              "padding": "5px"
           });
-      };
+      }
       if (p2Choice === "Paper") {
           $(".Paper").css({
               "border": "10px solid blue",
-              "padding": "5px",
+              "padding": "5px"
           });
-      };
+      }
       if (p2Choice === "Scissors") {
           $(".Scissors").css({
               "border": "10px solid blue",
-              "padding": "5px",
+              "padding": "5px"
           });
-      };
+      }
 
       if (p2Choice === "Rock" && p1Choice === "Rock") {
           $(".Rock").css({
               "border": "10px solid yellow",
-              "padding": "5px",
+              "padding": "5px"
           });
-      };
+      }
       if (p2Choice === "Paper" && p1Choice === "Paper") {
           $(".Paper").css({
               "border": "10px solid yellow",
-              "padding": "5px",
+              "padding": "5px"
           });
-      };
+      }
       if (p2Choice === "Scissors" && p1Choice === "Scissors") {
           $(".Scissors").css({
               "border": "10px solid yellow",
-              "padding": "5px",
+              "padding": "5px"
           });
-      };
+      }
 
 
       if ((p1Choice === "Rock") || (p1Choice === "Paper") || (p1Choice === "Scissors")) {
@@ -354,7 +353,7 @@
   }
 
 
-  // if enter is pressed"keyCode === 13" in the $("#chat-message") input field act as if it was submitted
+  // If enter is pressed"keyCode === 13" in the $("#chat-message") input field, act as if it was submitted.
   var userInput = document.getElementById("chat-message");
   userInput.addEventListener("keyup", function (event) {
       if (event.keyCode === 13) {
@@ -363,7 +362,8 @@
       }
   });
 
-  function chat() { // logic for the chatbox
+  //Chat box logic
+  function chat() {
       if ($("#chat-message").val().trim() == "") {
           return;
       }
@@ -376,7 +376,7 @@
 
       database.ref("/RPSchat").set({
           chatMessageKey: chatMessage,
-          whoAmIKey: whoAmI,
+          whoAmIKey: whoAmI
       });
 
 
@@ -394,7 +394,7 @@
   }
 
 
-  // update users chat is used
+  // Update users chat when RPSchat is updated.
   database.ref("RPSchat").on("value", function (snapshot) {
       chatMessage = snapshot.val().chatMessageKey;
       var whoSaidLast = snapshot.val().whoAmIKey;
@@ -416,15 +416,13 @@
       console.log("The read failed: " + errorObject.code);
   });
 
-  //update user when RPSp1 is updated
+  //Update user when RPSp1 is updated.
   database.ref("RPSp1").on("value", function (snapshot) {
-      console.log("p1 trigger");
       var p1children = 1;
       var p2children = 1;
 
       database.ref("RPSp2").on("value", function (snapshot) {
           p2children = snapshot.numChildren();
-          console.log("-------------------------------" + p2children);
 
       })
 
@@ -441,7 +439,7 @@
               p1LossesKey: 0,
               p2WinsKey: 0,
               p2LossesKey: 0,
-              tiesKey: 0,
+              tiesKey: 0
           });
           $("#p1-wins").html("Wins: 0");
           $("#p1-losses").html("Losses: 0");
@@ -465,7 +463,6 @@
 
       var currentChat = $("#chat-area").val().trim();
       /* if (currentChat == "" && p2children != 2) { // this may not be needed
-          console.log("RPS 1 spec ran");
           
           $("#chat-area").html("[SERVER MESSAGE] ~Welcome Spectator~ Welcome to Rock Paper Scissors! Enter your name to take a seat and access the chat. If you are spectating and a seat becomes available, click 'Take a seat and play' to join!");
       } */
@@ -478,14 +475,12 @@
       }
 
       if (p2Name != "" && p1Name != "") {
-          $("#announcer").html("Pick Rock Paper or Scissors!")
+          $("#announcer").html("Pick Rock Paper or Scissors!");
 
       }
 
-      console.log("p1 finish data P1: " + p1Name + " P2: " + p2Name);
 
       if (whatAmI == "Spectator" && (p2children == 1 || p1children == 1)) {
-          console.log("GIMME ACCESS TO SPOT P1 trigger");
           $(".joinGame").html("<button id='takeP1' onclick='takeP1()'>Take a seat and play</button>");
       } else {
           $(".joinGame").empty();
@@ -495,14 +490,12 @@
       console.log("The read failed: " + errorObject.code);
   });
 
-  //update user when RPSp2 is updated
+  //Update user when RPSp2 is updated.
   database.ref("RPSp2").on("value", function (snapshot) {
-      console.log("p2 trigger + snap#child= " + snapshot.numChildren());
       var p1children = 1;
       var p2children = 1;
 
       database.ref("RPSp1").on("value", function (snapshot) {
-          console.log("p2 trigger + snap#child for p1= " + snapshot.numChildren());
           p1children = snapshot.numChildren();
       })
 
@@ -512,7 +505,7 @@
 
       } else {
           p2Name = "";
-          $("#announcer").html("Two players needed to play!")
+          $("#announcer").html("Two players needed to play!");
           database.ref("/RPSinfo").set({
               p1ChoiceKey: "",
               p2ChoiceKey: "",
@@ -520,7 +513,7 @@
               p1LossesKey: 0,
               p2WinsKey: 0,
               p2LossesKey: 0,
-              tiesKey: 0,
+              tiesKey: 0
           });
           $("#p1-wins").html("Wins: 0");
           $("#p1-losses").html("Losses: 0");
@@ -545,7 +538,6 @@
 
       var currentChat = $("#chat-area").val().trim();
       if (currentChat == "" && p1children == 2) {
-          console.log("RPS 2 spec ran");
           $("#chat-area").html("[SERVER MESSAGE] ~Welcome Spectator~ Welcome to Rock Paper Scissors! Enter your name to take a seat and access the chat. If you are spectating and a seat becomes available, click 'Take a seat and play' to join!");
       }
 
@@ -561,19 +553,17 @@
       }
 
       if (whatAmI == "Spectator" && (p2children == 1 || p1children == 1)) {
-          console.log("GIMME ACCESS TO SPOT P2 trigger");
           $(".joinGame").html("<button class='input-group-text' id='takeP2' onclick='takeP2()'>Take a seat and play</button>");
       } else {
           $(".joinGame").empty();
       }
 
-      console.log("p2 finish data P1:" + p1Name + "P2:" + p2Name);
   }, function (errorObject) {
       console.log("The read failed: " + errorObject.code);
   });
 
 
-  //update user when RPSinfo is updated
+  //Update user when RPSinfo is updated.
   database.ref("RPSinfo").on("value", function (snapshot) {
       p1Choice = snapshot.val().p1ChoiceKey;
       p2Choice = snapshot.val().p2ChoiceKey;
@@ -584,13 +574,13 @@
       ties = snapshot.val().tiesKey;
 
       $(".Scissors").css({
-          "border": "none",
+          "border": "none"
       });
       $(".Rock").css({
-          "border": "none",
+          "border": "none"
       });
       $(".Paper").css({
-          "border": "none",
+          "border": "none"
       });
 
       if (p1Choice != "") {
@@ -618,7 +608,6 @@
 
 
       if (p2Choice != "" && p1Choice != "") {
-          console.log("ran result");
 
           result();
       }
@@ -650,7 +639,6 @@
 
       // Remove user from the connection list when they disconnect. 
       if (con2 != undefined) {
-          console.log(con2);
           con2.onDisconnect().remove();
       }
 
